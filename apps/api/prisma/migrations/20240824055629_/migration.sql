@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `user` MODIFY `points` INTEGER NULL DEFAULT 0,
+    MODIFY `balance` INTEGER NULL DEFAULT 0;
