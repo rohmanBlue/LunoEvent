@@ -1,9 +1,9 @@
-module.exports = {
+mmodule.exports = {
   apps: [
     {
       name: "api",
-      script: "apps/api/server.js",
-      cwd: "/root/nextTo", // ganti sesuai SSH_FOLDER kamu
+      script: "apps/api/dist/src/index.js", // backend build
+      watch: false,
       env: {
         NODE_ENV: "production",
         PORT: 8000,
@@ -12,12 +12,16 @@ module.exports = {
     {
       name: "web",
       script: "npm",
-      args: "run start --prefix apps/web",
-      cwd: "/root/nextTo", // ganti sesuai SSH_FOLDER kamu
+      args: "run serve",           // Next.js 14+ SSR
+      cwd: "apps/web",
+      interpreter: "bash",
+      watch: false,
       env: {
         NODE_ENV: "production",
         PORT: 3000,
       },
     },
   ],
+
+ 
 };
