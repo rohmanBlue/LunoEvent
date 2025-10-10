@@ -9,7 +9,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prepare": "husky install",
     "postprepare": "bash -c 'chmod ug+x .husky/*'",
-    "database": "cd apps/api && npx prisma init && npx prisma migrate dev --name init && npx prisma generate && npx prisma db push"
+"databaseFirst": "cd apps/api && npx prisma init && npx prisma migrate dev --name init && npx prisma generate && npx prisma db push",
+"databaseUpdate": "cd apps/api && npx prisma migrate dev --name init && npx prisma generate && npx prisma db push"
   },
   "devDependencies": {
     "@commitlint/cli": "^18.4.2",
