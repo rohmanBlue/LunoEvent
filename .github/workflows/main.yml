@@ -13,22 +13,27 @@ jobs:
         node-version: [18.x]
 
     steps:
+      # 1️⃣ Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2️⃣ Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Install Dependencies (Root Workspace)
+      # 3️⃣ Install dependencies (root workspace)
+      - name: Install dependencies
         run: |
           npm install -g turbo
           npm install
 
-      - name: Build Turbo Repo
-        run: turbo run build --filter=...
+      # 4️⃣ Build Turbo monorepo (frontend & backend)
+      - name: Build project
+        run: turbo run build
 
+      # 5️⃣ Deploy ke DigitalOcean (via SCP)
       - name: Deploy to DigitalOcean
         uses: appleboy/scp-action@master
         with:
@@ -45,7 +50,8 @@ jobs:
             deploy.config.js
           target: ${{ secrets.SSH_FOLDER }}
 
-      - name: Run on Server
+      # 6️⃣ Jalankan aplikasi di server DigitalOcean
+      - name: Run app on server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
