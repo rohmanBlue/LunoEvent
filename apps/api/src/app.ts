@@ -22,6 +22,7 @@ import path from 'path';
 import { PointBalanceRouter } from './routers/point.balance';
 import { CategoryRouter } from './routers/category.router'; // Import CategoryRouter
 
+const port = Number(PORT) || 8000 
 export default class App {
   readonly app: Express;
 
@@ -91,8 +92,8 @@ export default class App {
   }
 
   public start(): void {
-    this.app.listen(PORT, () => {
-      console.log(`  ➜  [API] Local: http://localhost:${PORT}/`);
+    this.app.listen(port, "0.0.0.0" () => {
+      console.log(`  ➜  [API] Local: http://localhost:${port}/`);
     });
   }
 }
