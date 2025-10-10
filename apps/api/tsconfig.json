@@ -10,7 +10,7 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "ignoreDeprecations": "6.0"   // tambahkan untuk hilangkan warning
+  //  "ignoreDeprecations": "6.0"   // tambahkan untuk hilangkan warning
   },
   "include": ["**/*.ts"],
   "exclude": ["node_modules"]
