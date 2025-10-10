@@ -6,7 +6,7 @@ module.exports = {
       cwd: "/root/nextTo", // ganti sesuai SSH_FOLDER kamu
       env: {
         NODE_ENV: "production",
-        PORT: 4000,
+        PORT: 8000,
       },
     },
     {
