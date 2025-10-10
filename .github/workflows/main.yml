@@ -4,33 +4,48 @@ on:
   push:
     branches:
       - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [18.x]
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Build Project
+
+      - name: Install Dependencies (Root Workspace)
         run: |
+          npm install -g turbo
           npm install
-          npm run build
-      - name: Deploy to Linode
+
+      - name: Build Turbo Repo
+        run: turbo run build --filter=...
+
+      - name: Deploy to DigitalOcean
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           port: ${{ secrets.SSH_PORT }}
-          source: './apps/web/.next, ./apps/web/*, ./apps/web/.*, ./apps/api, ./deploy.config.js, ./package*.json, ./turbo.json, ./.husky'
-          target: '${{ secrets.SSH_FOLDER }}'
-      - name: Run App
+          source: |
+            apps/web/.next
+            apps/web/package.json
+            apps/api
+            package*.json
+            turbo.json
+            deploy.config.js
+          target: ${{ secrets.SSH_FOLDER }}
+
+      - name: Run on Server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -41,6 +56,7 @@ jobs:
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
             cd ${{ secrets.SSH_FOLDER }}
+            npm install -g pm2 turbo
             npm install
             npx prisma generate --schema=./apps/api/prisma/schema.prisma
-            pm2 start deploy.config.js
+            pm2 start deploy.config.js --name nextTo

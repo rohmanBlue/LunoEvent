@@ -8,7 +8,8 @@
     "serve": "turbo run serve",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prepare": "husky install",
-    "postprepare": "bash -c 'chmod ug+x .husky/*'"
+    "postprepare": "bash -c 'chmod ug+x .husky/*'",
+    "database": "cd apps/api && npx prisma init && npx prisma migrate dev --name init && npx prisma generate && npx prisma db push"
   },
   "devDependencies": {
     "@commitlint/cli": "^18.4.2",
@@ -82,5 +83,14 @@
   "description": "This project uses React.js with NextJS for the frontend, Express.js for the backend, and TurboRepo for monorepo management, facilitating rapid development of a scalable web application with streamlined collaboration and efficient server-client interactions.",
   "main": "commitlint.config.js",
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rohmanBlue/onlytestNEXT.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/rohmanBlue/onlytestNEXT/issues"
+  },
+  "homepage": "https://github.com/rohmanBlue/onlytestNEXT#readme"
 }

@@ -34,7 +34,7 @@ export class EventRouter {
     this.router.patch(
       '/update-event/:eventId',
       verifyToken,
-      uploader('/product', 'EVE').array('eve', 3),
+      uploader('/product', 'EVE').single('eve'),
       this.eventController.updateEvent.bind(this.eventController),
     );
 

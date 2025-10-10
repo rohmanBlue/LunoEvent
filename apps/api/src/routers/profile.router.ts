@@ -24,7 +24,7 @@ export class ProfileRouter {
       verifyToken,
       uploader('/profile', 'USR').single('img'),
       this.profileController.addProfileUser,
-    );
+    ); 
     this.router.patch(
       '/profile',
       verifyToken,
@@ -33,7 +33,7 @@ export class ProfileRouter {
     );
   }
 
-  getRouter(): Router {
+  public getRouter(): Router {
     return this.router;
   }
 }

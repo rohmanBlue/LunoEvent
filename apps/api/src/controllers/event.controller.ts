@@ -230,6 +230,7 @@ export class EventController {
         totalSeats: Number(totalSeats),
         price: eventPrice,
         ticketType,
+        statusEvent: 'AVAILABLE',
         startTime: new Date(startTime),
         statusEvent: 'AVAILABLE',
         endTime: new Date(endTime),

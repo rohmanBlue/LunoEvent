@@ -1,12 +1,12 @@
 import {
   limiter,
   resetLimiterOnSuccess,
-} from '../middleware/limiter/loginLimiter';
+} from '../middleware/limiterValidator/loginLimiter';
 import { AuthController } from '../controllers/auth.controller';
-import { forgotPassValidation } from '../middleware/validator/forgotPassword';
-import { loginValidation } from '../middleware/validator/login';
-import { registerValidation } from '../middleware/validator/register';
-import { resetPassValidation } from '../middleware/validator/resetPassword';
+import { forgotPassValidation } from '../middleware/fieldValidator/forgotPassword';
+import { loginValidation } from '../middleware/fieldValidator/login';
+import { registerValidation } from '../middleware/fieldValidator/register';
+import { resetPassValidation } from '../middleware/fieldValidator/resetPassword';
 import { verifyToken } from '../middleware/verifyToken';
 import { Router } from 'express';
 

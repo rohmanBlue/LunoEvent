@@ -19,7 +19,7 @@ export const sendEmail = async (
 ) => {
   try {
     const urlLink = `http://localhost:3000/reset-password?token=${data?.token}`;
-    const templatePath = path.join(__dirname, '../templates', 'resetPass.hbs');
+    const templatePath = path.join(__dirname, '../utlis/templates', 'resetPass.hbs');
     const templateSource = fs.readFileSync(templatePath, 'utf-8');
     const compileTemplates = handlebars.compile(templateSource);
     const generateTemplate = compileTemplates({ ...data, urlLink });

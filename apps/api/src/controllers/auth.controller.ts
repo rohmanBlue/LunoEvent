@@ -1,9 +1,8 @@
 import prisma from '../prisma';
 import { sendEmail } from '../utils/emailResetPass';
 import { hashPassword } from '../utils/hash';
-import { createToken } from '../utils/jwt';
+import { createToken } from '../utils/sign';
 import { generateRandomId } from '../utils/randomGenerator';
-import { Prisma } from '../../../../node_modules/.prisma/client';
 import { compareSync } from 'bcrypt';
 import { error } from 'console';
 import { NextFunction, Request, Response } from 'express';

@@ -11,9 +11,7 @@ export const uploader = (dirName: string | null, prefixName?: string) => {
 
   // Configure storage for multer
   const configFileStore = multer.diskStorage({
-    destination: (
-      req: Request,
-      file: MulterFile,
+    destination: (req: Request, file: MulterFile,
       callback: (error: Error | null, destination: string) => void,
     ) => {
       // Resolve the destination directory path
@@ -21,8 +19,7 @@ export const uploader = (dirName: string | null, prefixName?: string) => {
       callback(null, fileDest);
     },
     filename: (
-      req: Request,
-      file: MulterFile,
+      req: Request, file: MulterFile,
       callback: (error: Error | null, filename: string) => void,
     ) => {
       // Generate unique filename
@@ -33,7 +30,6 @@ export const uploader = (dirName: string | null, prefixName?: string) => {
   });
 
   return multer({
-    storage: configFileStore,
-    limits: { fileSize: 50 * 1024 * 1024 }, // 50 MB limit
+    storage: configFileStore, limits: { fileSize: 50 * 1024 * 1024 }, // 50 MB limit
   });
 };

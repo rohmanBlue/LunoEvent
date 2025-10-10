@@ -25,20 +25,22 @@ import { CategoryRouter } from './routers/category.router'; // Import CategoryRo
 export default class App {
   readonly app: Express;
 
+// construtor Ini adalah mendaftarkan instance app, yaitu middleware app (bukan handler yang butuh next atau res.send)
   constructor() {
     this.app = express();
     this.configure();
     this.routes();
     this.handleError();
-  }
+  } 
 
+   
   private configure(): void {
     this.app.use(cors());
     this.app.use(json());
     this.app.use(urlencoded({ extended: true }));
     this.app.use('/assets', express.static(path.join(__dirname, '../public')));
-  }
-
+  }  // adalah ada bawaannya next() dari middleware express sendiri tanpa harus tulis next() 
+    
   private handleError(): void {
     // Handle 404 errors
     this.app.use((req: Request, res: Response, next: NextFunction) => {
