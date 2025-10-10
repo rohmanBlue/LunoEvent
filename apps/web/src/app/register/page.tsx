@@ -139,10 +139,14 @@ const Register: React.FunctionComponent<IRegisterProps> = (props) => {
         </div>
         <div className="w-full gap-5 h-auto flex relative text-xl text-white font-bold justify-center items-center">
           <div className="w-full flex justify-center items-center">
-            <RadioGroup
+
+               {/* <RadioGroup
               className="w-full flex justify-center gap-20 items-center"
               onVolumeChange={(e: React.ChangeEvent<HTMLInputElement>) => setRole(e.target.value)}
-            >
+            > */}
+            <RadioGroup
+              onValueChange={(value: string) => setRole(value)}
+                          >
               <div className="flex justify-center items-center gap-5">
                 {' '}
                 <RadioGroupItem value="USER" />
