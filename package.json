@@ -10,7 +10,9 @@
     "prepare": "husky install",
     "postprepare": "bash -c 'chmod ug+x .husky/*'",
 "databaseFirst": "cd apps/api && npx prisma init && npx prisma migrate dev --name init && npx prisma generate && npx prisma db push",
-"databaseUpdate": "cd apps/api && npx prisma migrate dev --name init && npx prisma generate && npx prisma db push"
+"databaseUpdateLive": "cd apps/api && npx prisma migrate dev --name init && npx prisma generate && npx prisma db push",
+"databaseUpdate": "npm install -g turbo && npm install && turbo run build && cd apps/api && npx prisma generate" 
+
   },
   "devDependencies": {
     "@commitlint/cli": "^18.4.2",
