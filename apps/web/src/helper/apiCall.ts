@@ -1,6 +1,19 @@
+// src/api/axios.ts
 import axios from 'axios';
-const apiCall = axios.create({
-  baseURL: 'https://starfish-app-xrxoq.ondigitalocean.app/',
+
+const api = axios.create({
+  baseURL: 'http://localhost:8000/api/', // Your API URL
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
-export default apiCall;
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token && config.headers) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
+  return config;
+});
+
+export default api;
