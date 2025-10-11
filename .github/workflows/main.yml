@@ -19,7 +19,7 @@ jobs:
         with:
           repository: rohmanBlue/onlytestNEXT
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          ref: main
+          ref: master
 
       # 2️⃣ Setup Node.js environment
       - name: Setup Node.js
