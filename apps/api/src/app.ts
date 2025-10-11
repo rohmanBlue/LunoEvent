@@ -21,6 +21,7 @@ import { PromotionRouter } from './routers/promotion.router';
 import path from 'path';
 import { PointBalanceRouter } from './routers/point.balance';
 import { CategoryRouter } from './routers/category.router'; // Import CategoryRouter
+import { start } from 'repl';
 
 const port = Number(PORT) || 8000 
 export default class App {
