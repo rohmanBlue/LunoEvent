@@ -13,32 +13,32 @@ jobs:
         node-version: [18.x]
 
     steps:
-      # 1️⃣ Clone repo kamu
-      - name: Checkout your repository
+      # 1️⃣ Checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           repository: rohmanBlue/onlytestNEXT
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           ref: master
 
-      # 2️⃣ Setup Node.js environment
+      # 2️⃣ Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
-      # 3️⃣ Install Turbo & dependencies utama
+      # 3️⃣ Install dependencies (root workspace)
       - name: Install dependencies
         run: |
           npm install -g turbo
           npm install
 
-      # 4️⃣ Build seluruh monorepo (frontend + backend)
-      - name: Build monorepo
+      # 4️⃣ Build Turbo monorepo (frontend & backend)
+      - name: Build project
         run: turbo run build
 
-      # 5️⃣ Upload hasil build ke DigitalOcean droplet kamu
-      - name: Upload to DigitalOcean (SCP)
+      # 5️⃣ Deploy ke DigitalOcean (via SCP)
+      - name: Deploy to DigitalOcean
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -54,8 +54,8 @@ jobs:
             deploy.config.js
           target: ${{ secrets.SSH_FOLDER }}
 
-      # 6️⃣ Jalankan server di Droplet (SSH)
-      - name: Start app on DigitalOcean
+      # 6️⃣ Jalankan aplikasi di server DigitalOcean
+      - name: Run app on server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}

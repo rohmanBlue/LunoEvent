@@ -231,7 +231,11 @@ export class EventController {
         price: eventPrice,
         ticketType,
         statusEvent: 'AVAILABLE',
+<<<<<<< HEAD
         startTime: new Date(startTime), 
+=======
+        startTime: new Date(startTime),
+>>>>>>> b61e367 (feat: hallo)
         endTime: new Date(endTime),
         userId: user.id,
         categoryId: categoryData.id,
