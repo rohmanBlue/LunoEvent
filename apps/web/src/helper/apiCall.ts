@@ -1,6 +1,6 @@
 import axios from 'axios';
 const apiCall = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: 'https://starfish-app-xrxoq.ondigitalocean.app/',
 });
 
 export default apiCall;
