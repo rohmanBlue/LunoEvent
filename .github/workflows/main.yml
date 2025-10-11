@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy Fullstack to DigitalOcean
 
 on:
   push:
@@ -6,35 +6,39 @@ on:
       - main
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [18.x]
 
     steps:
-      # 1️⃣ Checkout repository
-      - name: Checkout repository
+      # 1️⃣ Clone repo kamu
+      - name: Checkout your repository
         uses: actions/checkout@v4
+        with:
+          repository: rohmanBlue/onlytestNEXT
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          ref: main
 
-      # 2️⃣ Setup Node.js
+      # 2️⃣ Setup Node.js environment
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
-      # 3️⃣ Install dependencies (root workspace)
+      # 3️⃣ Install Turbo & dependencies utama
       - name: Install dependencies
         run: |
           npm install -g turbo
           npm install
 
-      # 4️⃣ Build Turbo monorepo (frontend & backend)
-      - name: Build project
+      # 4️⃣ Build seluruh monorepo (frontend + backend)
+      - name: Build monorepo
         run: turbo run build
 
-      # 5️⃣ Deploy ke DigitalOcean (via SCP)
-      - name: Deploy to DigitalOcean
+      # 5️⃣ Upload hasil build ke DigitalOcean droplet kamu
+      - name: Upload to DigitalOcean (SCP)
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -50,8 +54,8 @@ jobs:
             deploy.config.js
           target: ${{ secrets.SSH_FOLDER }}
 
-      # 6️⃣ Jalankan aplikasi di server DigitalOcean
-      - name: Run app on server
+      # 6️⃣ Jalankan server di Droplet (SSH)
+      - name: Start app on DigitalOcean
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -64,5 +68,7 @@ jobs:
             cd ${{ secrets.SSH_FOLDER }}
             npm install -g pm2 turbo
             npm install
-            npx prisma generate --schema=./apps/api/prisma/schema.prisma
-            pm2 start deploy.config.js --name nextTo
+            npx prisma generate --schema=./apps/api/prisma/schema.prisma || true
+            pm2 stop all || true
+            pm2 start deploy.config.js
+            pm2 save
