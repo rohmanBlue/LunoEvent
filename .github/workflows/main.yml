@@ -3,7 +3,7 @@ name: Deploy Fullstack to DigitalOcean
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
