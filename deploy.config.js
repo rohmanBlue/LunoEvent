@@ -1,27 +1,24 @@
-mmodule.exports = {
+module.exports = {
   apps: [
     {
-      name: "api",
-      script: "apps/api/dist/src/index.js", // backend build
+      name: 'web',
+      cwd: './apps/web',
+      script: 'npm',
+      args: 'run serve',
+      env: { NODE_ENV: 'production' },
       watch: false,
-      env: {
-        NODE_ENV: "production",
-        PORT: 8000,
-      },
+      max_restarts: 10,
+      restart_delay: 3000
     },
     {
-      name: "web",
-      script: "npm",
-      args: "run serve",           // Next.js 14+ SSR
-      cwd: "apps/web",
-      interpreter: "bash",
+      name: 'api',
+      cwd: './apps/api',
+      script: 'npm',
+      args: 'run serve',
+      env: { NODE_ENV: 'production', PORT: 8000 },
       watch: false,
-      env: {
-        NODE_ENV: "production",
-        PORT: 3000,
-      },
-    },
-  ],
-
- 
-};
+      max_restarts: 10,
+      restart_delay: 3000
+    }
+  ]
+}
