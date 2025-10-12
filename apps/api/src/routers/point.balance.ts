@@ -1,4 +1,4 @@
-import { PointBalanceController } from '@/controllers/poin.balance';
+import { PointBalanceController } from '../controllers/poin.balance';
 import { Router } from 'express' ; 
 
 export class PointBalanceRouter {

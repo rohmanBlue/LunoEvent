@@ -13,12 +13,19 @@ export class AuthController {
     try {
       const { email, password, confirmPassword, refCode, role } = req.body;
 
+      if (!email || !password) {
+  return res.status(400).send({
+    success: false,
+    message: 'Sertakan email dan passwordnya',
+  });
+}
+
       const findEmailExist = await prisma.user.findUnique({
         where: {
           email: email,
         },
       });
-
+    
       if (findEmailExist) {
         return res.status(401).send({
           success: false,

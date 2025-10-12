@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { PromotionController } from '@/controllers/promotion.contoroller';
+import { PromotionController } from '../controllers/promotion.contoroller';
 
 export class PromotionRouter {
   private router: Router;

@@ -21,8 +21,4 @@ module.exports = {
       restart_delay: 3000
     }
   ]
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> b96df1ee61017496d72da211dae11d1e23576340

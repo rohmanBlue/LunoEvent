@@ -7,12 +7,15 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
+    // tambahkan  "rootDir": "./src",  
+  "rootDir": "./src", 
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./*"]
     },
    // "ignoreDeprecations": "6.0"   // tambahkan untuk hilangkan warning
   },
-  "include": ["**/*.ts"],
+  "include": ["src/**/*.ts"],
+  // "include": ["**/*.ts"],
   "exclude": ["node_modules"]
 }
  
