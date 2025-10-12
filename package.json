@@ -8,10 +8,12 @@
     "serve": "turbo run serve",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prepare": "husky install",
+    "notPrepare": "if [ \"$NODE_ENV\" != \"production\" ]; then husky install; fi", 
     "postprepare": "bash -c 'chmod ug+x .husky/*'",
     "dbFirst": "cd apps/api && npx prisma init && npx prisma migrate dev --name init && npx prisma generate && npx prisma db push",
     "dbUpdateLive": "cd apps/api && npx prisma migrate dev --name init && npx prisma generate && npx prisma db push",
-    "dbUpdate": "npm install -g turbo && npm install && npm install @prisma/client && turbo run build && cd apps/api && npx prisma generate"
+    "dbUpdate": "npm install turbo && npm install @prisma/client && cd apps/api && npx prisma generate"
+
   },
   "devDependencies": {
     "@commitlint/cli": "^18.4.2",
