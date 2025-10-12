@@ -93,7 +93,7 @@ export default class App {
   }
 
   public start(): void {
-    this.app.listen(port, () => {
+    this.app.listen(port, "0.0.0.0", () => {
       console.log(`  ➜  [API] Local: http://localhost:${port}/`);
     });
   }
