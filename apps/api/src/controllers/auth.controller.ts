@@ -20,6 +20,7 @@ export class AuthController {
   });
 }
 
+      
       const findEmailExist = await prisma.user.findUnique({
         where: {
           email: email,
@@ -142,7 +143,7 @@ export class AuthController {
         success: false,
         message: 'Failed to register',
       });
-    }
+    } console.log('Request body:', req.body);
   }
 
   async login(req: Request, res: Response, next: NextFunction) {

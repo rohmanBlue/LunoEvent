@@ -7,17 +7,12 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-
-
-    
-  // "rootDir": "./src", 
+    "rootDir": "./src",
+        // wajib kalau pakai paths
     "paths": {
-      "@/*": ["./src*"]
-    },
-
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src/**/*"],
-
   "exclude": ["node_modules"]
 }
- 

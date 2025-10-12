@@ -94,9 +94,8 @@ export default class App {
 
  
 
-public async start(): Promise<void> {
-  const port = await getPort({ port: 8000 }); // kalau 8000 dipakai, getPort pilih port lain
-  this.app.listen(port, "0.0.0.0", () => {
+public start(): void{
+  this.app.listen(port,() => {
     console.log(`Server running on http://localhost:${port}`);
   });
 }}
