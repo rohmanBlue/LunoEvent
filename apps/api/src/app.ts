@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
-
+ import getPort from "get-port";
 import express, {
   urlencoded,
   Express,
@@ -92,9 +92,11 @@ export default class App {
     this.app.use('/api/category', categoryRouter.getRouter()); // Use CategoryRouter
   }
 
-  public start(): void {
-    this.app.listen(port, "0.0.0.0", () => {
-      console.log(`  ➜  [API] Local: http://localhost:${port}/`);
-    });
-  }
-}
+ 
+
+public async start(): Promise<void> {
+  const port = await getPort({ port: 8000 }); // kalau 8000 dipakai, getPort pilih port lain
+  this.app.listen(port, "0.0.0.0", () => {
+    console.log(`Server running on http://localhost:${port}`);
+  });
+}}
