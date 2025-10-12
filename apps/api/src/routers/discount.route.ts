@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { DiscountController } from '../../src/controllers/discount.controller';
+import { DiscountController } from '../controllers/discount.controller';
 
 export class DiscountRouter {
   private router: Router;

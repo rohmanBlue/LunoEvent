@@ -8,12 +8,11 @@
     "serve": "turbo run serve",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prepare": "husky install",
-    "notPrepare": "if [ \"$NODE_ENV\" != \"production\" ]; then husky install; fi", 
+    "notPrepare": "if [ \"$NODE_ENV\" != \"production\" ]; then husky install; fi",
     "postprepare": "bash -c 'chmod ug+x .husky/*'",
     "dbFirst": "cd apps/api && npx prisma init && npx prisma migrate dev --name init && npx prisma generate && npx prisma db push",
     "dbUpdateLive": "cd apps/api && npx prisma migrate dev --name init && npx prisma generate && npx prisma db push",
     "dbUpdate": "npm install turbo && npm install @prisma/client && cd apps/api && npx prisma generate"
-
   },
   "devDependencies": {
     "@commitlint/cli": "^18.4.2",
@@ -33,7 +32,7 @@
     "tailwindcss": "^4.1.14",
     "tsc-alias": "^1.8.10",
     "tsconfig": "*",
-    "turbo": "^2.0.14",
+    "turbo": "^2.5.8",
     "typescript": "^5.5.4"
   },
   "name": "finpro-nextjs-express-prisma",
