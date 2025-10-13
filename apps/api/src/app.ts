@@ -92,10 +92,9 @@ export default class App {
     this.app.use('/api/category', categoryRouter.getRouter()); // Use CategoryRouter
   }
 
- 
-
-public start(): void{
-  this.app.listen(port,() => {
-    console.log(`Server running on http://localhost:${port}`);
-  });
-}}
+ public start(): void {
+    this.app.listen(port, '0.0.0.0', () => {
+      console.log(`Server running on http://0.0.0.0:${port}`);
+    });
+  }
+} 
