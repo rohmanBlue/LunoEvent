@@ -65,9 +65,8 @@ The main goal of this MVP is to build a simple and functional event management p
   - View their events.
   - See attendee registrations and transactions.
   - Track basic event statistics.
-- Includes:
-  - Graph visualizations.
-  - Reports by year, month, and day.
+- Includes: 
+  - Reports by year, month, and day. 
 
 ---
 
@@ -81,8 +80,8 @@ The main goal of this MVP is to build a simple and functional event management p
 ---
 
 ## Team
-- **Rohman** - Web Developer
-- **Afred** - Web Developer
+- **Rohman** - Frontend Developer
+- **Afred** - Backend Developer
 - Project inspired by real-world event management needs.
 
 ---
