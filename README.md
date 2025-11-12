@@ -1,78 +1,94 @@
-# this testing deploy app with render
+# Event Management Platform
+**Mini Project by Rohman & Afred Team**
 
-This project uses React.js with NextJS for the frontend, Express.js for the backend, and TurboRepo for monorepo management, facilitating rapid development of a scalable web application with streamlined collaboration and efficient server-client interactions.
+---
 
-## Available Scripts
+## Objective
+The main goal of this MVP is to build a simple and functional event management platform where:
 
-### `npm run dev`
+- Event organizers can create, promote, and manage events.
+- Attendees can browse, register, and provide feedback for events.
 
-Runs the app in the development mode.
+---
 
-Open [http://localhost:5173](http://localhost:5173) to view it in the browser. For API, you can access it in [http://localhost:8000/api](http://localhost:8000/api). The app will reload if you make edits.
+## Core Features
 
-### `npm run build`
+### 1. Event Discovery & Details
+- Landing page with a list of events and event details.
+- Fully responsive design.
+- Attendees can:
+  - Browse upcoming events.
+  - Filter events by category or location.
+  - View detailed event info.
+  - Purchase tickets (free or paid).
+- Implements search bar with **debounce**, filtering, and pagination.
 
-Builds the app for production to the `dist` folder for each project.
+### 2. Event Transaction & Promotion
+- Organizers can create events with:
+  - Event name, price, date, time, location, description.
+  - Available seats and ticket types.
+- Supports free and paid events (paid events charge attendees as specified).
+- Organizers can create promotions:
+  - Discount vouchers for limited users using referral codes.
+  - Time-based discounts.
+- All prices are in **IDR**.
 
-### `npm run serve`
+### 3. Event Reviews & Ratings
+- Attendees can leave reviews and rate events.
+- Feedback includes overall experience, event quality, and suggestions for improvement.
 
-Runs the app in the production mode.
+---
 
-### `npm run <task> --workspace=<app-name>`
+### 4. User Authentication & Authorization
+- Users must create an account to attend events.
+- Two user roles:
+  - **Customer / Participant**: Browse events & purchase tickets.
+  - **Event Organizer / Promoter**: Create and sell event tickets.
+- Referral system:
+  - Users can register using another user’s referral number for discount coupons.
+  - Referral numbers are generated for new users.
+  - Points are earned each time someone uses your referral code.
 
-Run command on specific app (install package, run test, etc).
+---
 
-### `npm run <task> --workspace=<app-name> -- --<option>`
+### 5. Referral System: Points & Prizes
+- Each use of your referral code gives **10,000 points**.
+- Points expire **after 3 months**.
+- Points can be redeemed to reduce ticket prices.
+- Registering with a referral code gives **10% discount**.
+- Referral-based discounts valid for **3 months**.
 
-Run command on specific app with options.
+---
 
-Example : `npm run seqeulize --workspace=api -- --db:migrate`
+### 6. Event Management Dashboard
+- Organizers can access a dashboard to:
+  - View their events.
+  - See attendee registrations and transactions.
+  - Track basic event statistics.
+- Includes:
+  - Graph visualizations.
+  - Reports by year, month, and day.
 
-# Rules
+---
 
-## Commit & Pull Request
+## Technologies Used
+- **Frontend:** React, Next.js, TailwindCSS
+- **Backend:** Node.js, Express (or your backend choice)
+- **Database:** PostgreSQL / MySQL / MongoDB
+- **Authentication:** JWT or OAuth
+- **Other:** Chart.js / Recharts for statistics
 
-- Always use [conventional commit message](https://www.conventionalcommits.org/en/v1.0.0/) when committing changes or creating pull request
-- **"Squash and Merge"** your pull request to main branch
+---
 
-## Naming Convention
+## Team
+- **Rohman** - Web Developer
+- **Afred** - Web Developer
+- Project inspired by real-world event management needs.
 
-### REST API
+---
 
-- Always use [REST API naming convention](https://restfulapi.net/resource-naming/)
+## How to Run
+1. Clone the repository:  
+   ```bash
+   git clone https://github.com/yourusername/event-management-platform.git
 
-### File Naming Conventions:
-
-1. **Use CamelCase for filenames:**
-   - Begin filenames with a lowercase letter.
-   - For multiple words, capitalize the first letter of each subsequent word.
-   - Example: `index.js`, `userModel.js`, `dataAccess.js`
-
-2. **Use Descriptive Names:**
-   - Choose names that accurately describe the file's purpose or content.
-   - Avoid overly generic names like `utils.js` unless the file genuinely contains utility functions.
-
-3. **Follow Naming Conventions for Specific File Types:**
-   - For configuration files, use names like `.env`, `config.js`, or `settings.json`.
-   - Use consistent naming for test files, such as appending `.test.js` or `.spec.js` to the filename being tested.
-   - Use `package.json` for the project's metadata and dependencies.
-
-4. **Separate Concerns with File Naming:**
-   - Follow a modular structure for different concerns (e.g., `userController.js`, `userService.js`, `userModel.js` for a user-related module).
-
-### Folder Naming Conventions:
-
-1. **Use Singular or Plural Naming:**
-   - Choose a consistent convention for naming folders (e.g., `models` or `model`, `routes` or `route`).
-
-2. **Avoid Special Characters and Spaces:**
-   - Use hyphens (`-`) or underscores (`_`) for separating words in folder names, but avoid spaces or special characters.
-
-3. **Use Descriptive Names for Folders:**
-   - Name folders according to their content or purpose (e.g., `controllers`, `services`, `utils`, `tests`, `public`, `views`, etc.).
-
-4. **Nested Folder Structure:**
-   - Create a logical and organized folder structure based on the project's architecture.
-   - For larger projects, consider organizing files by features/modules (Feature-Based Structure) or layer-based (Layered Structure).
-# EventlyCms
-# LunoEvent
