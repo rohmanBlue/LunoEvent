@@ -1,149 +1,149 @@
 import prisma from '../prisma';
 import { sendEmail } from '../utils/emailResetPass';
 import { hashPassword } from '../utils/hash';
-import { createToken } from '../utils/sign';
+import { createToken } from '../utils/createToken';
 import { generateRandomId } from '../utils/randomGenerator';
 import { compareSync } from 'bcrypt';
 import { error } from 'console';
 import { NextFunction, Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
-  
+
 export class AuthController {
-  async register(req: Request, res: Response, next: NextFunction) {
+  async register(req: Request, res: Response) {
     try {
       const { email, password, confirmPassword, refCode, role } = req.body;
 
-      if (!email || !password) {
-  return res.status(400).send({
-    success: false,
-    message: 'Sertakan email dan passwordnya',
-  });
-}
+      if (!email || !password)
+        return res
+          .status(400)
+          .send({ success: false, message: 'Email & password wajib' });
 
-      
-      const findEmailExist = await prisma.user.findUnique({
-        where: {
-          email: email,
-        },
+      if (password !== confirmPassword)
+        return res
+          .status(400)
+          .send({ success: false, message: 'Password tidak cocok' });
+
+      const existingUser = await prisma.user.findUnique({ where: { email } });
+      if (existingUser)
+        return res
+          .status(400)
+          .send({ success: false, message: 'Email sudah digunakan' });
+
+      const referralCode = uuidv4().substring(0, 8); // kode referral unik untuk user baru
+      const identificationId = Math.random().toString(36).substring(2, 10);
+
+      // pastikan ada lokasi default
+      let location = await prisma.location.findFirst({
+        where: { locationName: 'Unknown' },
       });
-    
-      if (findEmailExist) {
-        return res.status(401).send({
-          success: false,
-          message: 'Email already exist. Please choose another email',
+      if (!location)
+        location = await prisma.location.create({
+          data: { locationName: 'Unknown' },
         });
-      }
 
-      const referralCode = uuidv4().substring(0, 8);
-      const identificationId = generateRandomId();
+      const userData: any = {
+        email,
+        password: await hashPassword(password),
+        identificationId,
+        referralCode,
+        role,
+        points: 0,
+        balance: 0,
+      };
 
+      // === Referral code digunakan ===
       if (refCode) {
-        const findUser = await prisma.user.findFirst({
-          where: {
-            referralCode: refCode,
-          },
+        const refUser = await prisma.user.findFirst({
+          where: { referralCode: refCode },
         });
+        if (!refUser)
+          return res
+            .status(404)
+            .send({ success: false, message: 'Referral code tidak valid' });
 
-        const addPoints = Math.round(findUser?.points || 0 + 10000);
-        await prisma.user.update({
-          data: {
-            points: addPoints,
-          },
-          where: {
-            email: findUser?.email,
-          },
-        });
+        // 1️⃣ Tambah 10.000 poin ke pemilik referral
+        const expiredAt = new Date();
+        expiredAt.setMonth(expiredAt.getMonth() + 3);
 
-        const dateNow = new Date();
-        const validToDate = new Date(dateNow);
-        validToDate.setMonth(dateNow.getMonth() + 3);
-        const validTo = validToDate.toISOString();
-        const code = generateRandomId();
-        await prisma.point.create({
-          data: {
-            userId: findUser?.id || 0,
-            amount: 10000,
-            validFrom: new Date().toISOString(),
-            validTo: validTo,
-          },
-        });
+        // await prisma.user.update({
+        //   where: { id: refUser.id },
+        //   data: { points: (refUser.points || 0) + 10000 },
+        // });
 
-        const discountID = await prisma.discountcode.create({
+        // Simpan riwayat point
+        // await prisma.point.create({
+        //   data: {
+        //     userId: refUser.id,
+        //     amount: 10000,
+        //     expiredAt,
+        //     validFrom: new Date(), // add this line
+        //     validTo: new Date(expiredAt.getTime() + 24 * 60 * 60 * 1000),
+        //   },
+        // });
+
+        // 2️⃣ Buat 10% discount coupon untuk user baru
+        const validTo = new Date();
+        validTo.setMonth(validTo.getMonth() + 3);
+
+        const discount = await prisma.discountcode.create({
           data: {
-            code: code,
-            amount: 5000, 
-            validFrom: new Date().toISOString(),
-            validTo: validTo,
+            code: uuidv4().substring(0, 8),
+            amount: 0, // add this line
+            discountPercent: 10,
+            validFrom: new Date(),
+            validTo,
             codeStatus: 'AVAILABLE',
             limit: 1,
           },
-        });
+        }); 
 
-        const user = await prisma.user.create({
-          //include userId in userProfile so it can be getUserProfile in profileController
-          data: {
-            email: email,
-            password: await hashPassword(password),
-            identificationId: identificationId,
-            referralCode: referralCode,
-            referredBy: findUser?.id,
-            role: role, 
-            balance: 0, 
-            discountusage: {
-              create: {
-                discountId: discountID.id,
-              },
-            },
-          },
-        });
+        userData.discountusage = {
+          create: { discountId: discount.id },
+        };
 
-        const token = createToken({ id: user.id, email: user.email }, '24h');
-
-        return res.status(200).send({
-          success: true,
-          message: 'your account is created',
-          result: {
-            email: user.email,
-            token: token,
-          },
-        });
-      } else {
-        const user = await prisma.user.create({
-          data: {
-            email: email,
-            password: await hashPassword(password),
-            identificationId: identificationId,
-            referralCode: referralCode,
-            role: role, 
-            balance: 0, 
-            points: 0,
-          },
-        });
-
-        const token = createToken({ id: user.id, email: user.email }, '24h');
-
-        console.log(identificationId);
-
-        return res.status(201).send({
-          success: true,
-          message: 'Your account is created',
-          result: {
-            email: user.email, 
-            user: user,
-            token: token,
-            identificationId: identificationId,
-            referralCode: referralCode,
-          },
-        });
+        userData.referredBy = refUser.id;
       }
-    } catch (error) {
-      console.log(error);
 
-      next({
-        success: false,
-        message: 'Failed to register',
+      // === Buat user baru ===
+      const user = await prisma.user.create({ data: userData });
+
+      // === Buat profil user ===
+      await prisma.userprofile.create({
+        data: {
+          userId: user.id,
+          firstName: '',
+          lastName: '',
+          gender: 'MALE',
+          address: '',
+          phoneNumber: '',
+          isAdded: false,
+          locationId: location.id,
+        },
       });
-    } console.log('Request body:', req.body);
+
+      // === Generate token ===
+      const token = createToken(
+        { id: user.id, email: user.email, role: user.role },
+        '24h',
+      );
+
+      return res.status(201).send({
+        success: true,
+        message: 'Akun berhasil dibuat',
+        result: {
+          email: user.email,
+          token,
+          identificationId,
+          referralCode,
+          role: user.role,
+        },
+      });
+    } catch (error) {
+      console.error('Register error:', error);
+      return res
+        .status(500)
+        .send({ success: false, message: 'Gagal mendaftar' });
+    }
   }
 
   async login(req: Request, res: Response, next: NextFunction) {
@@ -212,7 +212,9 @@ export class AuthController {
             identificationId: findUser.identificationId,
             role: findUser.role,
             points: findUser.points,
+            balance: findUser.balance,
             image: findProfile?.image,
+            referralCode: findUser.referralCode,
             token: createToken(
               {
                 id: findUser.id,
@@ -327,4 +329,4 @@ export class AuthController {
       });
     }
   }
-} 
+}

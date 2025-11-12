@@ -7,7 +7,7 @@ import { forgotPassValidation } from '../middleware/fieldValidator/forgotPasswor
 import { loginValidation } from '../middleware/fieldValidator/login';
 import { registerValidation } from '../middleware/fieldValidator/register';
 import { resetPassValidation } from '../middleware/fieldValidator/resetPassword';
-import { verifyToken } from '../middleware/verifyToken';
+import { verifyToken } from '../middleware/verifyToken'; 
 import { Router } from 'express';
 
 export class AuthRouter {
@@ -27,10 +27,11 @@ export class AuthRouter {
       limiter,
       resetLimiterOnSuccess,
       this.authController.login,
-    );
+    );  
     this.router.get('/keeplogin', verifyToken, this.authController.keepLogin);
     this.router.post(
-      '/forgot-password',
+      '/create-ttr',
+      // token-to-reset -> ttr
       forgotPassValidation,
       this.authController.forgotPassword,
     );
@@ -39,7 +40,7 @@ export class AuthRouter {
       resetPassValidation,
       verifyToken,
       this.authController.resetPassword,
-    );
+    ); 
     this.router.post(
       '/register',
       // registerValidation,

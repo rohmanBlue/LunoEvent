@@ -30,6 +30,7 @@ model discountcode {
   id            Int             @id @default(autoincrement())
   code          String          @unique
   amount        Int
+  discountPercent Int?             // bisa untuk diskon persen (ex: 10%)
   validFrom     DateTime
   validTo       DateTime
   limit         Int
@@ -189,43 +190,63 @@ model ticket {
 
   @@index([eventId])
   @@index([userId])
-}
+} 
 
 model user {
-  id               Int             @id @default(autoincrement())
+  id               Int              @id @default(autoincrement())
   identificationId String
-  email            String          @unique
+  email            String           @unique
   password         String
   referralCode     String
   referredBy       Int?
-  points           Int?            @default(0)
+  points           Int              @default(0)
   role             role
-  balance          Int
-  tryCount         Int             @default(0)
-  isBlocked        Boolean         @default(false)
-  isDeleted        Boolean         @default(false)
-  createdAt        DateTime        @default(now())
+  tryCount         Int              @default(0)
+  isBlocked        Boolean          @default(false)
+  isDeleted        Boolean          @default(false)
+  createdAt        DateTime         @default(now())
+
+  // Relations
+  balance          Float         @default(0)
   discountusage    discountusage[]
   event            event[]
   historyuser      historyuser[]
   point            point[]
   testimonial      testimonial[]
   ticket           ticket[]
-  user             user?           @relation("userTouser", fields: [referredBy], references: [id])
-  other_user       user[]          @relation("userTouser")
   userinterest     userinterest[]
   userprofile      userprofile[]
+ balanceHistory   balanceHistory[]
+
+  // Referral system (self relation)
+  user             user?            @relation("userTouser", fields: [referredBy], references: [id])
+  other_user       user[]           @relation("userTouser")
 
   @@index([referredBy])
 }
 
+model balanceHistory {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  type        String   // 'credit' | 'debit'
+  amount      Float
+  description String?
+  createdAt   DateTime @default(now())
+
+  user        user     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+
 model userinterest {
-  id            Int             @id @default(autoincrement())
+  id            Int              @id @default(autoincrement())
   userId        Int
   categoryId    Int
+
   eventinterest eventinterest[]
-  category      category        @relation(fields: [categoryId], references: [id])
-  user          user            @relation(fields: [userId], references: [id])
+  category      category         @relation(fields: [categoryId], references: [id])
+  user          user             @relation(fields: [userId], references: [id])
 
   @@index([userId])
   @@index([categoryId])
@@ -253,9 +274,11 @@ model userprofile {
 model point {
   id        Int      @id @default(autoincrement())
   userId    Int
-  amount    Int
+  amount    Int 
+  description String?
   validFrom DateTime
   validTo   DateTime
+  expiredAt   DateTime
   createdAt DateTime @default(now())
   user      user     @relation(fields: [userId], references: [id])
 
@@ -272,7 +295,7 @@ model Image {
   id      Int    @id @default(autoincrement())
   path    String
   eventId Int
-  event   event  @relation(fields: [eventId], references: [id])
+  event   event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
 }
 
 enum paid_status {
@@ -299,6 +322,7 @@ enum event_type {
 enum code_status {
   USED
   AVAILABLE
+    EXPIRED
 }
 
 enum gender {

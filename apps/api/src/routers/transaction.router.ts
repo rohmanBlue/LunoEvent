@@ -13,10 +13,10 @@ export class TransactionRouter {
   }
 
   private initializeRoutes(): void {
-    this.router.post('/transaction', this.transactionController.createTransaction);
-    this.router.get('/transaction/:id', this.transactionController.readTransaction);
-    this.router.put('/transaction/:id', this.transactionController.updateTransaction);
-    this.router.delete('/transaction/:id', this.transactionController.deleteTransaction); 
+    this.router.post('/transaction', verifyToken, this.transactionController.createTransaction);
+    this.router.get('/transaction/:id', verifyToken, this.transactionController.readTransaction);
+    this.router.put('/transaction/:id', verifyToken, this.transactionController.updateTransaction);
+    this.router.delete('/transaction/:id', verifyToken, this.transactionController.deleteTransaction); 
     
   }
 

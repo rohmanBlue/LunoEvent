@@ -87,14 +87,15 @@ export default class App {
     this.app.use('/api/transaction', transactionRouter.getRouter());
     this.app.use('/api/testimonial', testimonialRouter.getRouter());
     this.app.use('/api/discount', discountRouter.getRouter());
-    this.app.use('/api/balance-point', balancePointRouter.getRouter());
+    this.app.use('/api/balance', balancePointRouter.getRouter());
     this.app.use('/api/promotion', promotionRouter.getRouter());
     this.app.use('/api/category', categoryRouter.getRouter()); // Use CategoryRouter
   }
 
  public start(): void {
     this.app.listen(port, '0.0.0.0', () => {
-      console.log(`Server running on http://0.0.0.0:${port}`);
+        console.log(`Server running on http://localhost:${port}`);
+     // console.log(`Server running on http://0.0.0.0:${port}`);
     });
   }
 } 

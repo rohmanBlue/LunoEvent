@@ -1,27 +1,45 @@
 import { Router } from 'express';
 import { TestimonialController } from '../controllers/testimonial.controller';
+import { verifyToken } from '../middleware/verifyToken';
 
 export class TestimonialRouter {
   private router: Router;
   private testimonialController: TestimonialController;
 
-  public constructor() {
+  constructor() {
     this.router = Router();
     this.testimonialController = new TestimonialController();
     this.initializeRoutes();
   }
 
   private initializeRoutes(): void {
-    this.router.post('/testimonial', this.testimonialController.createTestimonial);
-    this.router.get('/testimonial/:eventId', this.testimonialController.readTestimonial);
-    this.router.put('/testimonial/:id', this.testimonialController.updateTestimonial);
-    this.router.delete('/testimonial/:id', this.testimonialController.deleteTestimonial);
+    // Semua route pakai token verify
+    this.router.post(
+      '/testimonial/:eventId',
+      verifyToken,
+      this.testimonialController.createTestimonial,
+    );
+
+    this.router.get(
+      '/testimonial/:eventId',
+      verifyToken,
+      this.testimonialController.readTestimonial,
+    );
+
+    this.router.put(
+      '/testimonial/:id',
+      verifyToken,
+      this.testimonialController.updateTestimonial,
+    );
+
+    this.router.delete(
+      '/testimonial/:id',
+      verifyToken,
+      this.testimonialController.deleteTestimonial,
+    );
   }
 
   public getRouter(): Router {
     return this.router;
   }
 }
-
-
-

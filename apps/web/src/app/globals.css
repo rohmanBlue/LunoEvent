@@ -2,12 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
+/* @layer base {
   * {
     font-family: 'KalesiRoundedDemo';
     letter-spacing: 3px; 
       }
-}
+} */
 
 @keyframes marquee {
   0% {
@@ -19,11 +19,12 @@
 }
 
 .animate-marquee {
-  animation: marquee 15s linear infinite;
-}
-@font-face {
-  font-family: 'KalesiRoundedDemo';
-  src: url('/fonts/KalesiRoundedDemo.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 25s linear infinite;
+  /* efek halus & elegan */
+  background: linear-gradient(90deg, #e6f7ff, #b3ecff, #e6f7ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
 }

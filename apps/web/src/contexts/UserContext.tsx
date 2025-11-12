@@ -1,65 +1,76 @@
 "use client";
 
-import { UserContextType, UserType } from './type';
-import * as React from 'react';
-import apiCall from '@/helper/apiCall';
-import { toast } from 'react-toastify';
-import { boolean } from 'yup';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import apiCall from "@/helper/apiBe";
+import { toast } from "react-toastify";
+import { UserType, UserContextType, UserProviderProps } from "./type";
 
-export const UserContext = React.createContext<UserContextType>({
-  user: null,
-  setUser: () => {},
-  loading: true,
-  setLoading: () => {},
-});
+export const UserContext = createContext<UserContextType | undefined>(
+  undefined,
+);
 
-interface IUserProviderProps {
-  children: React.ReactNode;
-}
+export const UserProvider = ({ children }: UserProviderProps) => {
+  const [user, setUser] = useState<UserType | null>(null);
+  const [loading, setLoading] = useState(true);
 
-export const UserProvider: React.FunctionComponent<IUserProviderProps> = ({
-  children,
-}) => {
-  const [user, setUser] = React.useState<UserType | null>(null);
-  const [loading, setLoading] = React.useState<boolean>(true);
+  useEffect(() => {
+    let token = null;
+    if (typeof window !== "undefined") {
+      token = localStorage.getItem("token");
+    }
 
-  const keepLogin = async () => {
-    try {
-      const checkToken = localStorage.getItem('token');
-      if (checkToken) {
-        const { data } = await apiCall.get('/api/auth/keeplogin', {
-          headers: {
-            Authorization: `Bearer ${checkToken}`,
-          },
-        });
-        console.log(data);
-        localStorage.setItem('token', data.result.token);
-        setUser({
-          id: data.result.id,
-          balance: data.result.balance,
-          email: data.result.email,
-          identificationId: data.result.identificationId,
-          role: data.result.role,
-          points: data.result.points,
-          image: data.result.image,
-        });
-      }
-    } catch (error: any) {
-      console.log(error);
-      toast(error);
-    } finally {
+    if (!token) {
       setLoading(false);
+      return;
     }
-  };
 
-  React.useEffect(() => {
-    const checkToken = localStorage.getItem('token');
-    if (checkToken) {
-      keepLogin();
-    } else {
-      setLoading(false); // No token, stop loading
-    }
+    const keepLogin = async () => {
+      try {
+        const { data } = await apiCall.get("/auth/keeplogin", {
+          headers: { Authorization: `Bearer ${token}` },
+        }); // ✅ CEK STRUKTUR DATA YANG DATANG
+        console.log("🔍 Response keeplogin:", data);
+        console.log("🔍 Result:", data?.result);
+        console.log("🔍 Balance:", data?.result?.balance);
+        console.log("🔍 Point:", data?.result?.point);
+        console.log("🔍 ID:", data?.result?.id);
+
+        // ✅ Pastikan response punya struktur yang benar
+        if (data?.result) {
+          // Update token jika ada token baru
+          if (data.result.token) {
+            localStorage.setItem("token", data.result.token);
+          }
+
+          // Set semua data user termasuk balance, point, id
+          setUser({
+            id: data.result.identificationId,
+            email: data.result.email,
+            name: data.result.name,
+            role: data.result.role,
+            image: data.result.image,
+            balance: data.result.balance || 0,
+            points: data.result.points || 0,
+            identificationId: data.result.identificationId,
+            firstName: data.result.firstName,
+            lastName: data.result.lastName,
+            phoneNumber: data.result.phoneNumber,
+            referralCode: data.result.referralCode,
+          });
+        } else {
+          localStorage.removeItem("token");
+        }
+      } catch (err) {
+        console.error("Keep login failed:", err);
+        localStorage.removeItem("token");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    keepLogin();
   }, []);
+
   return (
     <UserContext.Provider value={{ user, setUser, loading, setLoading }}>
       {children}
@@ -67,4 +78,11 @@ export const UserProvider: React.FunctionComponent<IUserProviderProps> = ({
   );
 };
 
-
+// Custom Hook
+export const useUser = (): UserContextType => {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error("useUser must be used within a UserProvider");
+  }
+  return context;
+};

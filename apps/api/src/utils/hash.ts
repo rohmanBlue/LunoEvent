@@ -8,3 +8,4 @@ export const hashPassword = async (
   const hashNewPassword = await hash(password, salt);
   return hashNewPassword;
 };
+ 

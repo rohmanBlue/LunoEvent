@@ -3,13 +3,26 @@ import handlebars from 'handlebars';
 import path from 'path';
 import fs from 'fs';
 
+const SMTP_USER = 'chickyboy9999@gmail.com'; // akun Gmail valid
+const SMTP_PASS = 'crhg jcqx cetx bnig';   // app password Gmail
+const FROM_ADDRESS = 'No Reply <yourgmail@gmail.com>';
+
+// transporter
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
-    user: process.env.EMAIL_SENDER,
-    pass: process.env.PASS_EMAILER,
+    user: SMTP_USER,
+    pass: SMTP_PASS,
   },
 });
+
+// const transporter = nodemailer.createTransport({
+//   service: 'Gmail',
+//   auth: {
+//     user: process.env.EMAIL_SENDER,
+//     pass: process.env.PASS_EMAILER,
+//   },
+// });
 
 export const sendEmail = async (
   emailTo: string,
@@ -19,7 +32,7 @@ export const sendEmail = async (
 ) => {
   try {
     const urlLink = `http://localhost:3000/reset-password?token=${data?.token}`;
-    const templatePath = path.join(__dirname, '../utlis/templates', 'resetPass.hbs');
+    const templatePath = path.join(__dirname, '../templates', 'resetPass.hbs');
     const templateSource = fs.readFileSync(templatePath, 'utf-8');
     const compileTemplates = handlebars.compile(templateSource);
     const generateTemplate = compileTemplates({ ...data, urlLink });
@@ -32,6 +45,8 @@ export const sendEmail = async (
     });
   } catch (error) {
     console.log(error);
-    throw error;
+    console.error('Failed to send email:', error);
+    // throw error;
   }
 };
+ 

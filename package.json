@@ -10,13 +10,14 @@
     "prepare": "husky install",
     "notPrepare": "if [ \"$NODE_ENV\" != \"production\" ]; then husky install; fi",
     "postprepare": "bash -c 'chmod ug+x .husky/*'",
-    "dbFirst": "cd apps/api && npx prisma init && npx prisma migrate dev --name init && npx prisma generate && npx prisma db push",
-    "dbUpdateLive": "cd apps/api && npx prisma migrate dev --name init && npx prisma generate && npx prisma db push",
-    "dbUpdate": "npm install turbo && npm install @prisma/client && cd apps/api && npx prisma generate"
+    "dbDC": "cd apps/api && npx prisma migrate deploy && npx prisma generate",
+    "dbF": "cd apps/api && npx prisma migrate dev --name init && npx prisma generate",
+    "dbUlocal": "cd apps/api && npx prisma migrate dev --name update && npx prisma generate"
   },
   "devDependencies": {
     "@commitlint/cli": "^18.4.2",
     "@commitlint/config-conventional": "^18.4.2",
+    "@types/cors": "^2.8.19",
     "@types/node": "^22.2.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
@@ -47,6 +48,7 @@
     }
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@prisma/client": "^6.17.1",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-checkbox": "^1.3.3",
@@ -55,14 +57,17 @@
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-menubar": "^1.1.16",
     "@radix-ui/react-navigation-menu": "^1.2.14",
+    "@radix-ui/react-popover": "^1.1.15",
     "@radix-ui/react-radio-group": "^1.3.8",
     "@radix-ui/react-select": "^2.2.6",
+    "@radix-ui/react-slot": "^1.2.4",
     "@types/axios": "^0.14.0",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "build": "^0.1.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
@@ -82,7 +87,8 @@
     "shadcn-ui": "^0.2.3",
     "tailwind-merge": "^2.5.0",
     "tailwindcss-animate": "^1.0.7",
-    "uuid": "^10.0.0"
+    "uuid": "^10.0.0",
+    "zustand": "^5.0.8"
   },
   "version": "1.0.0",
   "description": "This project uses React.js with NextJS for the frontend, Express.js for the backend, and TurboRepo for monorepo management, facilitating rapid development of a scalable web application with streamlined collaboration and efficient server-client interactions.",

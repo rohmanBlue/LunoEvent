@@ -1,12 +1,13 @@
+// app/layout.ts
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { Navbar } from './layout/navbar';
-import { Footer } from '../components/Footer';
+import Navbar from '../../src/app/component-Ui/navbar';
+import Footer from '../../src/app/component-Ui/footer';
 import QueryProvider from '../utils/provider/QueryProvider';
-import { UserProvider }  from '@/contexts/UserContext';
+import { UserProvider } from '@/contexts/UserContext';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ['latin']});
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -18,16 +19,19 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <html lang="en">
+  return ( 
+    <html lang="en" className='bg-[#79dfff]'>
       <body className={inter.className}>
         <QueryProvider>
           <UserProvider>
             <Navbar />
-            <main> {children} </main>
+
+            <main>{children}</main>
+
+          
+            <Footer />
           </UserProvider>
         </QueryProvider>
-        {/* <Footer /> */}
       </body>
     </html>
   );

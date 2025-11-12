@@ -38,11 +38,11 @@ export class EventRouter {
       this.eventController.updateEvent.bind(this.eventController),
     );
 
-        // this.router.delete(
-    //   '/delete-event',
-    //   verifyToken,
-    //   this.eventController.deleteEvent,
-    // );
+        this.router.delete(
+      '/delete-event/:eventId',
+      verifyToken,
+      this.eventController.deleteEvent,
+    );
   }
 
   getRouter(): Router {
